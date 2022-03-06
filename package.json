@@ -41,20 +41,25 @@
   "name": "wall-e",
   "author": "Pedro",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.13.0",
     "eslint": "^8.10.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^16.1.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.5",
     "prettier": "^2.5.1",
     "tslib": "^2.3.1",
-    "typescript": "^4.6.2",
-    "@typescript-eslint/eslint-plugin": "^5.13.0",
-    "husky": "^7.0.0"
+    "typescript": "^4.6.2"
   },
   "dependencies": {
     "@discordjs/rest": "^0.3.0",
     "discord-api-types": "^0.27.3",
     "discord.js": "^13.6.0",
     "dotenv": "^16.0.0"
+  },
+  "lint-staged": {
+    "*.ts": "eslint --cache --fix src",
+    "*.{ts,css,md}": "prettier --write src"
   }
 }
