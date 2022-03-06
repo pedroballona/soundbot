@@ -29,18 +29,20 @@ function isDevelopment(): boolean {
 }
 
 function getConfiguration(): ConfigurationType {
+  const base: BaseConfiguration = {
+    token: getRequiredVariable('WALL_TOKEN'),
+    clientId: getRequiredVariable('WALL_CLIENT_ID'),
+  };
   if (isDevelopment()) {
     return {
+      ...base,
       isDevelopment: true,
-      token: getRequiredVariable('WALL_TOKEN'),
-      clientId: getRequiredVariable('WALL_CLIENT_ID'),
       guildId: getRequiredVariable('WALL_GUILD_ID'),
     };
   }
   return {
+    ...base,
     isDevelopment: false,
-    token: getRequiredVariable('WALL_TOKEN'),
-    clientId: getRequiredVariable('WALL_CLIENT_ID'),
   };
 }
 
