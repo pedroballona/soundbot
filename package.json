@@ -7,21 +7,29 @@
     "dist",
     "src"
   ],
-  "engines": {
-    "node": ">=10"
-  },
   "scripts": {
-    "start": "tsdx watch",
-    "build": "tsdx build",
-    "test": "tsdx test",
-    "lint": "tsdx lint",
-    "prepare": "tsdx build",
-    "size": "size-limit",
-    "analyze": "size-limit --why"
+    "start": "NODE_ENV=development node dist/main.ts",
+    "lint": "prettier --write src && eslint --fix src",
+    "build": "tsc"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "tsdx lint"
+      "pre-commit": "npm run lint"
+    }
+  },
+  "eslintConfig": {
+    "extends": [
+      "airbnb",
+      "airbnb-typescript"
+    ],
+    "env": {
+      "browser": false,
+      "node": true
+    },
+    "parser": "@typescript-eslint/parser",
+    "plugins": ["@typescript-eslint"],
+    "parserOptions": {
+      "project": ["tsconfig.json"]
     }
   },
   "prettier": {
@@ -30,26 +38,18 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "wall-e-1",
+  "name": "wall-e",
   "author": "Pedro",
-  "module": "dist/wall-e-1.esm.js",
-  "size-limit": [
-    {
-      "path": "dist/wall-e-1.cjs.production.min.js",
-      "limit": "10 KB"
-    },
-    {
-      "path": "dist/wall-e-1.esm.js",
-      "limit": "10 KB"
-    }
-  ],
   "devDependencies": {
-    "@size-limit/preset-small-lib": "^7.0.8",
+    "@typescript-eslint/parser": "^5.13.0",
+    "eslint": "^8.10.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^16.1.0",
     "husky": "^7.0.4",
-    "size-limit": "^7.0.8",
-    "tsdx": "^0.14.1",
+    "prettier": "^2.5.1",
     "tslib": "^2.3.1",
-    "typescript": "^3.9.10"
+    "typescript": "^4.6.2",
+    "@typescript-eslint/eslint-plugin": "^5.13.0"
   },
   "dependencies": {
     "@discordjs/rest": "^0.3.0",

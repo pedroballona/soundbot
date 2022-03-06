@@ -1,4 +1,4 @@
-import "dotenv/config";
+import 'dotenv/config';
 
 interface BaseConfiguration {
   readonly token: string;
@@ -25,24 +25,25 @@ function getRequiredVariable(name: string): string {
 }
 
 function isDevelopment(): boolean {
-  return process.env.NODE_ENV?.trim() === "development";
+  return process.env.NODE_ENV?.trim() === 'development';
 }
 
-let Configuration: ConfigurationType;
-
-if(isDevelopment()) {
-  Configuration = {
-    isDevelopment: true,
-    token: getRequiredVariable("WALL_TOKEN"),
-    clientId: getRequiredVariable("WALL_CLIENT_ID"),
-    guildId: getRequiredVariable("WALL_GUILD_ID"),
-  };
-} else {
-  Configuration = {
+function getConfiguration(): ConfigurationType {
+  if (isDevelopment()) {
+    return {
+      isDevelopment: true,
+      token: getRequiredVariable('WALL_TOKEN'),
+      clientId: getRequiredVariable('WALL_CLIENT_ID'),
+      guildId: getRequiredVariable('WALL_GUILD_ID'),
+    };
+  }
+  return {
     isDevelopment: false,
-    token: getRequiredVariable("WALL_TOKEN"),
-    clientId: getRequiredVariable("WALL_CLIENT_ID")
+    token: getRequiredVariable('WALL_TOKEN'),
+    clientId: getRequiredVariable('WALL_CLIENT_ID'),
   };
 }
+
+const Configuration = getConfiguration();
 
 export default Configuration;
