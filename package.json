@@ -10,7 +10,8 @@
   "scripts": {
     "start": "NODE_ENV=development node dist/main.ts",
     "lint": "prettier --write src && eslint --fix src",
-    "build": "tsc"
+    "build": "tsc",
+    "prepare": "husky install"
   },
   "husky": {
     "hooks": {
@@ -27,9 +28,13 @@
       "node": true
     },
     "parser": "@typescript-eslint/parser",
-    "plugins": ["@typescript-eslint"],
+    "plugins": [
+      "@typescript-eslint"
+    ],
     "parserOptions": {
-      "project": ["tsconfig.json"]
+      "project": [
+        "tsconfig.json"
+      ]
     }
   },
   "prettier": {

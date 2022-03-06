@@ -1,3 +1,3 @@
-// import Configuration from "./config";
+import Configuration from './config';
 
-console.log('Here');
+console.log(Configuration);
