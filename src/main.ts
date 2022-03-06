@@ -1,9 +1,16 @@
 import { Client, Collection, Intents } from 'discord.js';
 import fs from 'node:fs';
+import { generateDependencyReport } from '@discordjs/voice';
 import Configuration from './config';
 
 // Create a new client instance
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new Client({
+  intents: [
+    Intents.FLAGS.GUILDS,
+    Intents.FLAGS.GUILD_MESSAGES,
+    Intents.FLAGS.GUILD_VOICE_STATES,
+  ],
+});
 
 const commands = new Collection<string, { execute: Function }>();
 const commandFiles = fs
@@ -40,3 +47,5 @@ client.once('ready', () => {
 
 // Login to Discord with your client's token
 client.login(Configuration.token);
+
+console.log(generateDependencyReport());

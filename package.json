@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "start": "NODE_ENV=development npm run build && node dist/main.js",
-    "deploy:commands": "NODE_ENV=development npm run build && node dist/deploy-commands.js",
+    "deploy:commands": "npm run build && NODE_ENV=development node dist/deploy-commands.js",
     "lint": "prettier --write src && eslint --fix src",
     "build": "tsc",
     "prepare": "husky install"
@@ -61,9 +61,12 @@
   "dependencies": {
     "@discordjs/builders": "^0.12.0",
     "@discordjs/rest": "^0.3.0",
+    "@discordjs/voice": "^0.8.0",
     "discord-api-types": "^0.27.3",
     "discord.js": "^13.6.0",
-    "dotenv": "^16.0.0"
+    "dotenv": "^16.0.0",
+    "libsodium-wrappers": "^0.7.9",
+    "opusscript": "^0.0.8"
   },
   "lint-staged": {
     "*.ts": "eslint --cache --fix src",
