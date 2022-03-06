@@ -10,6 +10,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "useDefineForClassFields": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "sourceMap": true
   }
 }
