@@ -1,6 +1,5 @@
 import { Client, Collection, Intents } from 'discord.js';
 import fs from 'node:fs';
-import { generateDependencyReport } from '@discordjs/voice';
 import Configuration from './config';
 
 // Create a new client instance
@@ -42,10 +41,8 @@ client.on('interactionCreate', async (interaction) => {
 
 // When the client is ready, run this code (only once)
 client.once('ready', () => {
-  console.log('Ready!');
+  console.log('[LOG] Ready!');
 });
 
 // Login to Discord with your client's token
 client.login(Configuration.token);
-
-console.log(generateDependencyReport());

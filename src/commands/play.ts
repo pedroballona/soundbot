@@ -1,49 +1,68 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import {
-  createAudioPlayer,
-  createAudioResource,
+  entersState,
   getVoiceConnection,
-  StreamType,
+  joinVoiceChannel,
+  VoiceConnectionStatus,
 } from '@discordjs/voice';
-import { CommandInteraction } from 'discord.js';
+import { CommandInteraction, GuildMember } from 'discord.js';
+import { getAudioPlayerForGuild, getAudioResource } from '../audio';
 
 export default {
   data: new SlashCommandBuilder()
     .setName('play')
-    .setDescription('Makes Wall-E play a sound'),
-  async execute(interaction: CommandInteraction) {
-    if (interaction.guild == null) {
-      return interaction.reply({
-        content: 'This command can only be used on servers.',
-        ephemeral: true,
-      });
+    .setDescription('Makes Wall-E play a sound')
+    .addStringOption((option) => option
+      .setName('code')
+      .setRequired(true)
+      .setDescription('Enter the code of a sound')),
+  async execute(interaction: CommandInteraction): Promise<void> {
+    await interaction.deferReply();
+    if (
+      !(interaction.member instanceof GuildMember)
+      || !interaction.member.voice.channel
+      || !interaction.guildId
+    ) {
+      await interaction.editReply('You have to be in a voice channel');
+      return;
     }
-    const connection = getVoiceConnection(interaction.guild.id);
+    const { channel } = interaction.member.voice;
+    let connection = getVoiceConnection(interaction.guildId);
     if (connection == null) {
-      return interaction.reply({
-        content: "I'm not in a voice channel right now",
-        ephemeral: true,
+      connection = joinVoiceChannel({
+        channelId: channel.id,
+        guildId: channel.guild.id,
+        adapterCreator: channel.guild.voiceAdapterCreator,
       });
     }
-    const player = createAudioPlayer();
-    const giraffeSound = createAudioResource(
-      '/home/hao/Neon Pedro/programming/node/wall-e/sounds/giraffe.ogg',
-      { inputType: StreamType.OggOpus },
-    );
-    player.on('stateChange' as any, (oldState: any, newState: any) => {
-      console.log(
-        `Audio player transitioned from ${oldState.status} to ${newState.status}`,
+    try {
+      await entersState(connection, VoiceConnectionStatus.Ready, 20e3);
+      const player = getAudioPlayerForGuild(channel.guildId);
+      const soundCode = interaction.options.getString('code');
+      if (soundCode == null) {
+        await interaction.editReply('You must provide a valid sound code :(');
+        return;
+      }
+      const resource = getAudioResource(soundCode);
+      if (resource == null) {
+        await interaction.editReply(
+          'The provided code does not match a known sound :(',
+        );
+        return;
+      }
+      player.play(resource);
+      const subscription = connection.subscribe(player);
+      if (subscription) {
+        // Unsubscribe after 5 seconds (stop playing audio on the voice connection)
+        setTimeout(() => subscription.unsubscribe(), 5_000);
+      }
+      await interaction.editReply(
+        `<@${interaction.user.id}> is playing ${soundCode}! :D`,
       );
-    });
-    player.on('error', (error) => {
-      console.error('Error:', error.message, 'with track');
-    });
-    player.play(giraffeSound);
-    const subscription = connection.subscribe(player);
-    if (subscription) {
-      // Unsubscribe after 5 seconds (stop playing audio on the voice connection)
-      setTimeout(() => subscription.unsubscribe(), 5_000);
+    } catch {
+      await interaction.editReply(
+        'Failed to join voice channel within 20 seconds, please try again later!',
+      );
     }
-    return interaction.reply({ content: 'Playing the sound', ephemeral: true });
   },
 };
