@@ -59,9 +59,10 @@ export default {
       await interaction.editReply(
         `<@${interaction.user.id}> is playing ${soundCode}! :D`,
       );
-    } catch {
+    } catch (error) {
+      console.error(error);
       await interaction.editReply(
-        'Failed to join voice channel within 20 seconds, please try again later!',
+        "We're experiencing difficulties, try again later.",
       );
     }
   },
