@@ -15,8 +15,8 @@ commandFiles.forEach((file) => {
   commands.push(command.data.toJSON());
 });
 
+console.log('Registering commands...');
 if (Configuration.isDevelopment) {
-  console.log('Registering commands...');
   rest
     .put(
       Routes.applicationGuildCommands(
@@ -25,6 +25,11 @@ if (Configuration.isDevelopment) {
       ),
       { body: commands },
     )
+    .then(() => console.log('Successfully registered application commands.'))
+    .catch(console.error);
+} else {
+  rest
+    .put(Routes.applicationCommands(Configuration.clientId), { body: commands })
     .then(() => console.log('Successfully registered application commands.'))
     .catch(console.error);
 }

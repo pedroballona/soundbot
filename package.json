@@ -8,8 +8,10 @@
     "src"
   ],
   "scripts": {
-    "start": "NODE_ENV=development npm run build && node dist/main.js",
-    "deploy:commands": "npm run build && NODE_ENV=development node dist/deploy-commands.js",
+    "start:dev": "npm run build && NODE_ENV=development node dist/main.js",
+    "start": "node dist/main.js",
+    "deploy:commands:dev": "npm run build && NODE_ENV=development node dist/deploy-commands.js",
+    "deploy:commands": "node dist/deploy-commands.js",
     "lint": "prettier --write src && eslint --fix src",
     "build": "tsc",
     "prepare": "husky install"
